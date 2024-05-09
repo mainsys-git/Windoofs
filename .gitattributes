@@ -1,0 +1,7 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Set default behavior for command prompt diff.
+# This is needed for earlier builds of msysgit that do not have it on by default
+# for csharp files. Note: This is only used by the command line.
+#
