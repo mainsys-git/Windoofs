@@ -12,14 +12,14 @@
 template <size_t pathSize = MAX_PATH, size_t usernameSize = UNLEN + 1>
 std::wstring SetPath(const wchar_t* path)
 {
-    wchar_t username[usernameSize];
-    DWORD username_len = usernameSize;
-    GetUserName(username, &username_len);
+	wchar_t username[usernameSize];
+	DWORD username_len = usernameSize;
+	GetUserName(username, &username_len);
 
-    wchar_t pathBuffer[pathSize];
-    swprintf(pathBuffer, pathSize, path, username);
+	wchar_t pathBuffer[pathSize];
+	swprintf(pathBuffer, pathSize, path, username);
 
-    return pathBuffer;
+	return pathBuffer;
 }
 
 /**
@@ -29,29 +29,29 @@ std::wstring SetPath(const wchar_t* path)
  */
 void Delete::BaseDelete(const std::filesystem::path& dir)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(dir))
-    {
-        try
-        {
-            // Remove the file or directory
-            remove_all(entry.path());
-            // Update the GUI with the deleted file
-            MainGUI::lbFiles->AppendString(entry.path().c_str());
-            MainGUI::UpdateGui();
+	for (const auto& entry : std::filesystem::directory_iterator(dir))
+	{
+		try
+		{
+			// Remove the file or directory
+			remove_all(entry.path());
+			// Update the GUI with the deleted file
+			MainGUI::lbFiles->AppendString(entry.path().c_str());
+			MainGUI::UpdateGui();
 
 #if DEBUG
             // Log the deletion in debug mode
             Log::LogMessage(entry.path().c_str(), true);
 #endif
-        }
-        catch (const std::filesystem::filesystem_error ex)
-        {
+		}
+		catch (const std::filesystem::filesystem_error ex)
+		{
 #if DEBUG
             // Log the error in debug mode
             Log::LogMessage(entry.path().c_str(), false);
 #endif
-        }
-    }
+		}
+	}
 }
 
 /**
@@ -61,44 +61,44 @@ void Delete::BaseDelete(const std::filesystem::path& dir)
  */
 void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(dir))
-    {
-        try
-        {
-            if (is_directory(entry))
-            {
-                // Recursively delete the directory
-                DeleteFilesRecursevly(entry.path());
-            }
-            else
-            {
-                try
-                {
-                    // Remove the file
-                    std::filesystem::remove(entry.path());
-                    MainGUI::lbFiles->AppendString(entry.path().c_str());
-                    Log::LogMessage(entry.path().c_str(), true);
-                    MainGUI::UpdateGui();
-                }
-                catch (const std::filesystem::filesystem_error ex)
-                {
-                    Log::LogMessage(entry.path().c_str(), false);
-                }
-            }
-        }
-        catch (const std::filesystem::filesystem_error ex)
-        {
-            Log::LogMessage(entry.path().c_str(), false);
-        }
-        catch (const std::exception ex)
-        {
-            Log::LogMessage(entry.path().c_str(), false);
-        }
-        catch (...)
-        {
-            Log::LogMessage(entry.path().c_str(), false);
-        }
-    }
+	for (const auto& entry : std::filesystem::directory_iterator(dir))
+	{
+		try
+		{
+			if (is_directory(entry))
+			{
+				// Recursively delete the directory
+				DeleteFilesRecursevly(entry.path());
+			}
+			else
+			{
+				try
+				{
+					// Remove the file
+					std::filesystem::remove(entry.path());
+					MainGUI::lbFiles->AppendString(entry.path().c_str());
+					Log::LogMessage(entry.path().c_str(), true);
+					MainGUI::UpdateGui();
+				}
+				catch (const std::filesystem::filesystem_error ex)
+				{
+					Log::LogMessage(entry.path().c_str(), false);
+				}
+			}
+		}
+		catch (const std::filesystem::filesystem_error ex)
+		{
+			Log::LogMessage(entry.path().c_str(), false);
+		}
+		catch (const std::exception ex)
+		{
+			Log::LogMessage(entry.path().c_str(), false);
+		}
+		catch (...)
+		{
+			Log::LogMessage(entry.path().c_str(), false);
+		}
+	}
 }
 
 /**
@@ -109,14 +109,14 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
  */
 bool Delete::DirectoryExists(const wchar_t* path)
 {
-    DWORD ftyp = GetFileAttributesW(path);
-    if (ftyp == INVALID_FILE_ATTRIBUTES)
-        return false;
+	DWORD ftyp = GetFileAttributesW(path);
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;
 
-    if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-        return true;
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;
 
-    return false;
+	return false;
 }
 
 /**
@@ -124,8 +124,8 @@ bool Delete::DirectoryExists(const wchar_t* path)
  */
 void Delete::DeleteTempFiles()
 {
-    auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Temp\\");
-    DeleteFilesRecursevly(path);
+	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Temp\\");
+	DeleteFilesRecursevly(path);
 }
 
 /**
@@ -133,10 +133,10 @@ void Delete::DeleteTempFiles()
  */
 void Delete::DeleteWindowsTempFiles()
 {
-    wchar_t path[MAX_PATH];
-    swprintf(path, MAX_PATH, L"C:\\Windows\\Temp\\");
+	wchar_t path[MAX_PATH];
+	swprintf(path, MAX_PATH, L"C:\\Windows\\Temp\\");
 
-    DeleteFilesRecursevly(path);
+	DeleteFilesRecursevly(path);
 }
 
 /*void Delete::DeleteWindowsLogs()
@@ -159,8 +159,8 @@ void Delete::DeleteWindowsTempFiles()
  */
 void Delete::DeleteChromeCache()
 {
-    auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\");
-    BaseDelete(path);
+	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\");
+	BaseDelete(path);
 }
 
 /**
@@ -168,8 +168,8 @@ void Delete::DeleteChromeCache()
  */
 void Delete::DeleteEdgeCache()
 {
-    auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\");
-    BaseDelete(path);
+	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\");
+	BaseDelete(path);
 }
 
 /**
@@ -177,20 +177,20 @@ void Delete::DeleteEdgeCache()
  */
 void Delete::DeleteCookies()
 {
-    auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Network\\");
-    BaseDelete(path);
+	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Network\\");
+	BaseDelete(path);
 
-    path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network\\");
-    BaseDelete(path);
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network\\");
+	BaseDelete(path);
 
-    path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Opera Software\\Opera Stable\\Network\\");
-    BaseDelete(path);
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Opera Software\\Opera Stable\\Network\\");
+	BaseDelete(path);
 
-    path = SetPath(L"C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
-    BaseDelete(path);
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
+	BaseDelete(path);
 
-    path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network\\");
-    BaseDelete(path);
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network\\");
+	BaseDelete(path);
 }
 
 /**
@@ -198,17 +198,17 @@ void Delete::DeleteCookies()
  */
 void Delete::DeleteRecycleBin()
 {
-    SHEmptyRecycleBin(nullptr, nullptr, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
-    if (GetLastError() == ERROR_SUCCESS)
-    {
-        MainGUI::lbFiles->AppendString(L"Recycle Bin cleared!");
-        MainGUI::UpdateGui();
-    }
-    else
-    {
-        MainGUI::lbFiles->AppendString(L"Recycle Bin could not be cleared!");
+	SHEmptyRecycleBin(nullptr, nullptr, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
+	if (GetLastError() == ERROR_SUCCESS)
+	{
+		MainGUI::lbFiles->AppendString(L"Recycle Bin cleared!");
 		MainGUI::UpdateGui();
-    }
+	}
+	else
+	{
+		MainGUI::lbFiles->AppendString(L"Recycle Bin could not be cleared!");
+		MainGUI::UpdateGui();
+	}
 #if DEBUG
     Log::LogMessage(L"Recycle Bin cleared!", true);
 #endif

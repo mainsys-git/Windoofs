@@ -1,111 +1,140 @@
+// Windoof GUI Application
 #include "includes.h"
 
-// Definition des statischen Elements
+// Static member variable to store the list box
 wxListBox* MainGUI::lbFiles = nullptr;
 
+// Constructor for MainGUI class
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Windoof")
 {
-	// CheckBoxes
-	int checkBoxX = 10;
-	int checkBoxY = 10;
-	int checkBoxSpacing = 30;
-	cbTemp = new wxCheckBox(this, wxID_ANY, "Delete Temp Files?", wxPoint(checkBoxX, checkBoxY));
-	cbChromeCache = new wxCheckBox(this, wxID_ANY, "Delete Chrome Cache?",
-	                               wxPoint(checkBoxX, checkBoxY + checkBoxSpacing));
-	cbEdgeCache = new wxCheckBox(this, wxID_ANY, "Delete Edge Cache?",
-	                             wxPoint(checkBoxX, checkBoxY + 2 * checkBoxSpacing));
-	cbCookies = new wxCheckBox(this, wxID_ANY, "Delete Cookies?", wxPoint(checkBoxX, checkBoxY + 3 * checkBoxSpacing));
+    // Initialize check boxes
+    int checkBoxX = 10;
+    int checkBoxY = 10;
+    int checkBoxSpacing = 30;
+    cbTemp = new wxCheckBox(this, wxID_ANY, "Delete Temp Files?", wxPoint(checkBoxX, checkBoxY));
+    // Check box to delete Chrome cache
+    cbChromeCache = new wxCheckBox(this, wxID_ANY, "Delete Chrome Cache?",
+        wxPoint(checkBoxX, checkBoxY + checkBoxSpacing));
+    // Check box to delete Edge cache
+    cbEdgeCache = new wxCheckBox(this, wxID_ANY, "Delete Edge Cache?",
+        wxPoint(checkBoxX, checkBoxY + 2 * checkBoxSpacing));
+    // Check box to delete cookies
+    cbCookies = new wxCheckBox(this, wxID_ANY, "Delete Cookies?", wxPoint(checkBoxX, checkBoxY + 3 * checkBoxSpacing));
 
-	// Delete Windows Logs Checkbox
-	cbDeleteWindowsLogs = new wxCheckBox(this, wxID_ANY, "Delete Windows Logs?",
-	                                     wxPoint(checkBoxX + 200, checkBoxY + checkBoxSpacing));
+    // Check box to delete Windows logs
+    cbDeleteWindowsLogs = new wxCheckBox(this, wxID_ANY, "Delete Windows Logs?",
+        wxPoint(checkBoxX + 200, checkBoxY + checkBoxSpacing));
 
-	// Recycle Bin Checkbox
-	cbRecycleBin = new wxCheckBox(this, wxID_ANY, "Clear Recycle Bin", wxPoint(checkBoxX + 200, checkBoxY));
+    // Check box to clear Recycle Bin
+    cbRecycleBin = new wxCheckBox(this, wxID_ANY, "Clear Recycle Bin", wxPoint(checkBoxX + 200, checkBoxY));
 
-	// ListBox
-	int listBoxX = 10;
-	int listBoxY = 150;
-	int listBoxWidth = 300;
-	int listBoxHeight = 100;
-	lbFiles = new wxListBox(this, wxID_ANY, wxPoint(listBoxX, listBoxY), wxSize(listBoxWidth, listBoxHeight));
+    // Initialize list box
+    int listBoxX = 10;
+    int listBoxY = 150;
+    int listBoxWidth = 300;
+    int listBoxHeight = 100;
+    lbFiles = new wxListBox(this, wxID_ANY, wxPoint(listBoxX, listBoxY), wxSize(listBoxWidth, listBoxHeight));
 
-	// Button
-	testButton = new wxButton(this, wxID_ANY, "Clear", wxPoint(listBoxX, listBoxY + listBoxHeight + 10),
-	                          wxSize(50, 20));
+    // Initialize clear button
+    testButton = new wxButton(this, wxID_ANY, "Clear", wxPoint(listBoxX, listBoxY + listBoxHeight + 10),
+        wxSize(50, 20));
 
-	// Bind Button Click Handler
-	testButton->Bind(wxEVT_BUTTON, &MainGUI::OnClean_Clicked, this);
+    // Bind button click event handler
+    testButton->Bind(wxEVT_BUTTON, &MainGUI::OnClean_Clicked, this);
 }
 
-
+// Update GUI method
 void MainGUI::UpdateGui()
 {
-	if (lbFiles == nullptr)
-		return;;
+    // Check if list box is null
+    if (lbFiles == nullptr)
+        return;
 
-	lbFiles->Update();
-	lbFiles->SetSelection(lbFiles->GetCount() - 1);
+    // Update list box
+    lbFiles->Update();
+    // Set selection to the last item in the list box
+    lbFiles->SetSelection(lbFiles->GetCount() - 1);
 }
 
+// Event handler for clear button click
 void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 {
-	if (!Log::IsOpen)
-	{
-		Log::OpenConsole();
-		Log::IsOpen = true;
-	}
-		
+    // Check if log is not open
+    if (!Log::IsOpen)
+    {
+        // Open console log
+        Log::OpenConsole();
+        Log::IsOpen = true;
+    }
 
-	if (cbTemp->IsChecked())
-	{
-		Delete::DeleteTempFiles();
-		Delete::DeleteWindowsTempFiles();
-		cbTemp->SetValue(false);
-	}
+    // Check if temp files checkbox is checked
+    if (cbTemp->IsChecked())
+    {
+        // Delete temp files
+        Delete::DeleteTempFiles();
+        Delete::DeleteWindowsTempFiles();
+        // Uncheck temp files checkbox
+        cbTemp->SetValue(false);
+    }
 
-	if (cbChromeCache->IsChecked())
-	{
-		Delete::DeleteChromeCache();
-		cbChromeCache->SetValue(false);
-	}
+    // Check if Chrome cache checkbox is checked
+    if (cbChromeCache->IsChecked())
+    {
+        // Delete Chrome cache
+        Delete::DeleteChromeCache();
+        // Uncheck Chrome cache checkbox
+        cbChromeCache->SetValue(false);
+    }
 
-	if (cbEdgeCache->IsChecked())
-	{
-		Delete::DeleteEdgeCache();
-		cbEdgeCache->SetValue(false);
-	}
+    // Check if Edge cache checkbox is checked
+    if (cbEdgeCache->IsChecked())
+    {
+        // Delete Edge cache
+        Delete::DeleteEdgeCache();
+        // Uncheck Edge cache checkbox
+        cbEdgeCache->SetValue(false);
+    }
 
-	if (cbCookies->IsChecked())
-	{
-		ProcessManagement::ForceClose("msedge.exe");
-		ProcessManagement::ForceClose("chrome.exe");
-		ProcessManagement::ForceClose("opera.exe");
-		ProcessManagement::ForceClose("firefox.exe");
+    // Check if cookies checkbox is checked
+    if (cbCookies->IsChecked())
+    {
+        // Force close browsers
+        ProcessManagement::ForceClose("msedge.exe");
+        ProcessManagement::ForceClose("chrome.exe");
+        ProcessManagement::ForceClose("opera.exe");
+        ProcessManagement::ForceClose("firefox.exe");
 
+        // Delete cookies
+        Delete::DeleteCookies();
 
-		Delete::DeleteCookies();
+        // Uncheck cookies checkbox
+        cbCookies->SetValue(false);
+    }
 
-		cbCookies->SetValue(false);
-	}
+    // Check if Windows logs checkbox is checked
+    if (cbDeleteWindowsLogs->IsChecked())
+    {
+        // Delete Windows temp files
+        Delete::DeleteWindowsTempFiles();
+        // Uncheck Windows logs checkbox
+        cbDeleteWindowsLogs->SetValue(false);
+    }
 
-	if (cbDeleteWindowsLogs->IsChecked())
-	{
-		Delete::DeleteWindowsTempFiles();
-		cbDeleteWindowsLogs->SetValue(false);
-	}
+    // Check if Recycle Bin checkbox is checked
+    if (cbRecycleBin->IsChecked())
+    {
+        // Clear Recycle Bin
+        Delete::DeleteRecycleBin();
+        // Uncheck Recycle Bin checkbox
+        cbRecycleBin->SetValue(false);
+    }
 
+    // Append separator and "Finished!" message to list box
+    lbFiles->AppendString(L"------------------------------");
+    lbFiles->AppendString(L"Finished!");
 
-	if (cbRecycleBin->IsChecked())
-	{
-		Delete::DeleteRecycleBin();
-		cbRecycleBin->SetValue(false);
-	}
-
-	lbFiles->AppendString(L"------------------------------");
-	lbFiles->AppendString(L"Finished!");
-
-	UpdateGui();
+    // Update GUI
+    UpdateGui();
 }
 
 bool Windoof::OnInit()
