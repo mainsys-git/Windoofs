@@ -18,10 +18,9 @@ private:
 	void OnClean_Clicked(wxCommandEvent& event);
 	// Elemente
 	wxCheckBox* cbTemp;
-	wxCheckBox* cbChromeCache;
-	wxCheckBox* cbEdgeCache;
+	wxCheckBox* cbInstallFiles;
+	wxCheckBox* cbCache;
 	wxCheckBox* cbCookies;
 	wxCheckBox* cbRecycleBin;
-	wxCheckBox* cbDeleteWindowsLogs;
-	wxButton* testButton;
+	wxButton* clearButton;
 };

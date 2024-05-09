@@ -12,9 +12,9 @@ public:
 	static bool DirectoryExists(const wchar_t* path);
 	static void DeleteTempFiles();
 	static void DeleteWindowsTempFiles();
+	static void DeleteWindowsInstallFiles();
 	//	static void DeleteWindowsLogs(); 
-	static void DeleteChromeCache();
-	static void DeleteEdgeCache();
+	static void DeleteBrowserCaches();
 	static void DeleteCookies();
 	static void DeleteRecycleBin();
 };

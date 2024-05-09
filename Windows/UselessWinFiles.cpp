@@ -77,26 +77,33 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 					// Remove the file
 					std::filesystem::remove(entry.path());
 					MainGUI::lbFiles->AppendString(entry.path().c_str());
-					Log::LogMessage(entry.path().c_str(), true);
+					if (Log::IsOpen)
+					{
+												Log::LogMessage(entry.path().c_str(), true);
+					}
 					MainGUI::UpdateGui();
 				}
 				catch (const std::filesystem::filesystem_error ex)
 				{
-					Log::LogMessage(entry.path().c_str(), false);
+					if (Log::IsOpen)
+						Log::LogMessage(entry.path().c_str(), false);
 				}
 			}
 		}
 		catch (const std::filesystem::filesystem_error ex)
 		{
-			Log::LogMessage(entry.path().c_str(), false);
+			if (Log::IsOpen)
+				Log::LogMessage(entry.path().c_str(), false);
 		}
 		catch (const std::exception ex)
 		{
-			Log::LogMessage(entry.path().c_str(), false);
+			if (Log::IsOpen)
+				Log::LogMessage(entry.path().c_str(), false);
 		}
 		catch (...)
 		{
-			Log::LogMessage(entry.path().c_str(), false);
+			if (Log::IsOpen)
+				Log::LogMessage(entry.path().c_str(), false);
 		}
 	}
 }
@@ -139,6 +146,55 @@ void Delete::DeleteWindowsTempFiles()
 	DeleteFilesRecursevly(path);
 }
 
+void Delete::DeleteWindowsInstallFiles()
+{
+	wchar_t path[MAX_PATH];
+	swprintf(path, MAX_PATH, L"C:\\$WINDOWS.~BT");
+	DeleteFilesRecursevly(path);
+
+	swprintf(path, MAX_PATH, L"C:\\$Windows.~WS");
+	DeleteFilesRecursevly(path);
+}
+
+/**
+ * Deletes browser caches.
+ */
+void Delete::DeleteBrowserCaches()
+{
+	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\");
+
+	if (DirectoryExists(path.c_str()))
+	{
+		BaseDelete(path);
+	}
+
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\");
+	if (DirectoryExists(path.c_str()))
+	{
+		BaseDelete(path);
+	}
+
+
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Opera Software\\Opera Stable\\Cache\\");
+	if (DirectoryExists(path.c_str()))
+	{
+		BaseDelete(path);
+	}
+
+
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
+	if (DirectoryExists(path.c_str()))
+	{
+		BaseDelete(path);
+	}
+
+	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Cache\\");
+	if (DirectoryExists(path.c_str()))
+	{
+		BaseDelete(path);
+	}
+}
+
 /*void Delete::DeleteWindowsLogs()
 {
     Log::OpenConsole();
@@ -154,23 +210,6 @@ void Delete::DeleteWindowsTempFiles()
     DeleteFilesRecursevly(pathSystem32);
 }*/
 
-/**
- * DeleteChromeCache function to delete Chrome cache.
- */
-void Delete::DeleteChromeCache()
-{
-	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\");
-	BaseDelete(path);
-}
-
-/**
- * DeleteEdgeCache function to delete Edge cache.
- */
-void Delete::DeleteEdgeCache()
-{
-	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\");
-	BaseDelete(path);
-}
 
 /**
  * DeleteCookies function to delete cookies.
