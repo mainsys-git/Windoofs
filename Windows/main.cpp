@@ -1,5 +1,6 @@
 // Windoof GUI Application
 #include "includes.h"
+#include "ProgramManagement.h"
 
 // Static member variable to store the list box
 wxListBox* MainGUI::lbFiles = nullptr;
@@ -61,13 +62,19 @@ void MainGUI::UpdateGui()
 // Event handler for clear button click
 void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 {
-	// Check if log is not open
-	//if (!Log::IsOpen)
-	//{
+	std::vector<std::wstring> programs;
+
+	//Check if log is not open
+	if (!Log::IsOpen)
+	{
 		// Open console log
-	//	Log::OpenConsole();
-	//	Log::IsOpen = true;
-	//}
+		Log::OpenConsole();
+		Log::IsOpen = true;
+	}
+
+	ProgramManagement::ProgramEntry();
+
+	
 
 	// Check if temp files checkbox is checked
 	if (cbTemp->IsChecked())
@@ -83,7 +90,7 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 	if (cbInstallFiles->IsChecked())
 	{
 		// Delete install files
-		Delete::DeleteWindowsInstallFiles();
+		Delete::DeleteWindowsInstallationFiles();
 		// Uncheck install files checkbox
 		cbInstallFiles->SetValue(false);
 	}

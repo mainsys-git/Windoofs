@@ -17,17 +17,24 @@ std::wstring SetPath(const wchar_t* path)
 	GetUserName(username, &username_len);
 
 	wchar_t pathBuffer[pathSize];
-	swprintf(pathBuffer, pathSize, path, username);
+	if (username == L"PCService")
+	{
+		swprintf(pathBuffer, pathSize, path, L"c.mieske");
+	}
+	else
+	{
+		swprintf(pathBuffer, pathSize, path, username);
+	}
 
 	return pathBuffer;
 }
 
 /**
- * BaseDelete function to delete a directory and its contents.
+ * DeleteFiles function to delete a directory and its contents.
  *
  * @param dir The directory path to delete
  */
-void Delete::BaseDelete(const std::filesystem::path& dir)
+void Delete::DeleteFiles(const std::filesystem::path& dir)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(dir))
 	{
@@ -63,6 +70,11 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(dir))
 	{
+		if (!exists(entry.path()))
+		{
+			break;
+		}
+
 		try
 		{
 			if (is_directory(entry))
@@ -79,7 +91,7 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 					MainGUI::lbFiles->AppendString(entry.path().c_str());
 					if (Log::IsOpen)
 					{
-												Log::LogMessage(entry.path().c_str(), true);
+						Log::LogMessage(entry.path().c_str(), true);
 					}
 					MainGUI::UpdateGui();
 				}
@@ -146,7 +158,7 @@ void Delete::DeleteWindowsTempFiles()
 	DeleteFilesRecursevly(path);
 }
 
-void Delete::DeleteWindowsInstallFiles()
+void Delete::DeleteWindowsInstallationFiles()
 {
 	wchar_t path[MAX_PATH];
 	swprintf(path, MAX_PATH, L"C:\\$WINDOWS.~BT");
@@ -165,33 +177,33 @@ void Delete::DeleteBrowserCaches()
 
 	if (DirectoryExists(path.c_str()))
 	{
-		BaseDelete(path);
+		DeleteFiles(path);
 	}
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\");
 	if (DirectoryExists(path.c_str()))
 	{
-		BaseDelete(path);
+		DeleteFiles(path);
 	}
 
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Opera Software\\Opera Stable\\Cache\\");
 	if (DirectoryExists(path.c_str()))
 	{
-		BaseDelete(path);
+		DeleteFiles(path);
 	}
 
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
 	if (DirectoryExists(path.c_str()))
 	{
-		BaseDelete(path);
+		DeleteFiles(path);
 	}
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Cache\\");
 	if (DirectoryExists(path.c_str()))
 	{
-		BaseDelete(path);
+		DeleteFiles(path);
 	}
 }
 
@@ -217,19 +229,19 @@ void Delete::DeleteBrowserCaches()
 void Delete::DeleteCookies()
 {
 	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Network\\");
-	BaseDelete(path);
+	DeleteFiles(path);
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network\\");
-	BaseDelete(path);
+	DeleteFiles(path);
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Opera Software\\Opera Stable\\Network\\");
-	BaseDelete(path);
+	DeleteFiles(path);
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
-	BaseDelete(path);
+	DeleteFiles(path);
 
 	path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network\\");
-	BaseDelete(path);
+	DeleteFiles(path);
 }
 
 /**

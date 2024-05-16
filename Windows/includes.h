@@ -10,3 +10,5 @@
 #include <TlHelp32.h>
 #include <codecvt>
 #include "main.h"
+#include <vector>
+#include <string>

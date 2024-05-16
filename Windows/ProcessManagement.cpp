@@ -33,7 +33,7 @@ void ProcessManagement::ForceClose(const char* processName)
 			if (targetProcessNameLength > 0)
 			{
 				targetProcessName.resize(targetProcessNameLength - 1);
-				MultiByteToWideChar(CP_UTF8, 0, processName, -1, &targetProcessName[0], targetProcessNameLength);
+				MultiByteToWideChar(CP_UTF8, 0, processName, -1, targetProcessName.data(), targetProcessNameLength);
 			}
 
 			// Check if the current process matches the target process
@@ -84,7 +84,7 @@ bool ProcessManagement::IsProcessRunning(const char* processName)
 			if (targetProcessNameLength > 0)
 			{
 				targetProcessName.resize(targetProcessNameLength - 1);
-				MultiByteToWideChar(CP_UTF8, 0, processName, -1, &targetProcessName[0], targetProcessNameLength);
+				MultiByteToWideChar(CP_UTF8, 0, processName, -1, targetProcessName.data(), targetProcessNameLength);
 			}
 
 			// Check if the current process matches the target process
