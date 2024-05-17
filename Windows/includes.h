@@ -12,3 +12,5 @@
 #include "main.h"
 #include <vector>
 #include <string>
+#include <wx/timer.h>
+

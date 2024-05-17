@@ -47,7 +47,6 @@ void Delete::DeleteFiles(const std::filesystem::path& dir)
 			remove_all(entry.path());
 			// Update the GUI with the deleted file
 			MainGUI::lbFiles->AppendString(entry.path().c_str());
-			MainGUI::UpdateGui();
 
 #if DEBUG
             // Log the deletion in debug mode
@@ -96,7 +95,6 @@ void Delete::DeleteFilesRecursively(const std::filesystem::path& dir)
 					{
 						Log::LogMessage(entry.path().c_str(), true);
 					}
-					MainGUI::UpdateGui();
 				}
 				catch (const std::filesystem::filesystem_error ex)
 				{
@@ -238,12 +236,10 @@ void Delete::DeleteRecycleBin()
 	if (GetLastError() == ERROR_SUCCESS)
 	{
 		MainGUI::lbFiles->AppendString(L"Recycle Bin cleared!");
-		MainGUI::UpdateGui();
 	}
 	else
 	{
 		MainGUI::lbFiles->AppendString(L"Recycle Bin could not be cleared!");
-		MainGUI::UpdateGui();
 	}
 #if DEBUG
     Log::LogMessage(L"Recycle Bin cleared!", true);
