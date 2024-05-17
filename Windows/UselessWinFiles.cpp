@@ -14,17 +14,20 @@ std::wstring SetPath(const wchar_t* path)
 {
 	wchar_t username[usernameSize];
 	DWORD username_len = usernameSize;
-	GetUserName(username, &username_len);
+	if (!GetUserName(username, &username_len))
+	{
+		std::cerr << "Failed to get the username.\n";
+		return L"";
+	}
+
+	// Vergleiche den Benutzernamen direkt
+	if (wcscmp(username, L"PCService") == 0)
+	{
+		wcscpy_s(username, L"c.mieske");
+	}
 
 	wchar_t pathBuffer[pathSize];
-	if (username == L"PCService")
-	{
-		swprintf(pathBuffer, pathSize, path, L"c.mieske");
-	}
-	else
-	{
-		swprintf(pathBuffer, pathSize, path, username);
-	}
+	swprintf(pathBuffer, pathSize, path, username);
 
 	return pathBuffer;
 }
@@ -144,6 +147,7 @@ bool Delete::DirectoryExists(const wchar_t* path)
 void Delete::DeleteTempFiles()
 {
 	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Temp\\");
+	std::cout << path << "\n";
 	DeleteFilesRecursively(path);
 }
 

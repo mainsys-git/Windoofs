@@ -1,6 +1,5 @@
 // Windoof GUI Application
 #include "includes.h"
-#include "ProgramManagement.h"
 
 // Static member variable to store the list box
 wxListBox* MainGUI::lbFiles = nullptr;
@@ -30,6 +29,10 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Windoof")
 	// Check box to clear Recycle Bin
 	cbRecycleBin = new wxCheckBox(this, wxID_ANY, "Clear Recycle Bin",
 	                              wxPoint(checkBoxX + 200, checkBoxY + 3 * checkBoxSpacing));
+
+	cbCache->SetValue(true);
+	cbTemp->SetValue(true);
+	cbRecycleBin->SetValue(true);
 
 	// Initialize list box
 	int listBoxX = 10;
@@ -62,8 +65,6 @@ void MainGUI::UpdateGui()
 // Event handler for clear button click
 void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 {
-	std::vector<std::wstring> programs;
-
 	//Check if log is not open
 	if (!Log::IsOpen)
 	{
@@ -72,15 +73,13 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 		Log::IsOpen = true;
 	}
 
-	ProgramManagement::ProgramEntry();
-
 
 	// Check if temp files checkbox is checked
 	if (cbTemp->IsChecked())
 	{
 		// Delete temp files
 		Delete::DeleteTempFiles();
-		Delete::DeleteWindowsTempFiles();
+		//Delete::DeleteWindowsTempFiles();
 		// Uncheck temp files checkbox
 		cbTemp->SetValue(false);
 	}
