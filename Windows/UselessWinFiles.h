@@ -8,7 +8,7 @@ class Delete
 {
 public:
 	static void DeleteFiles(const std::filesystem::path& dir);
-	static void DeleteFilesRecursevly(const std::filesystem::path& dir);
+	static void DeleteFilesRecursively(const std::filesystem::path& dir);
 	static bool DirectoryExists(const wchar_t* path);
 	static void DeleteTempFiles();
 	static void DeleteWindowsTempFiles();

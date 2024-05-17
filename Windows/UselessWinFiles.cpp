@@ -62,11 +62,11 @@ void Delete::DeleteFiles(const std::filesystem::path& dir)
 }
 
 /**
- * DeleteFilesRecursevly function to delete files and directories recursively.
+ * DeleteFilesRecursively function to delete files and directories recursively.
  *
  * @param dir The directory path to delete recursively
  */
-void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
+void Delete::DeleteFilesRecursively(const std::filesystem::path& dir)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(dir))
 	{
@@ -80,7 +80,7 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 			if (is_directory(entry))
 			{
 				// Recursively delete the directory
-				DeleteFilesRecursevly(entry.path());
+				DeleteFilesRecursively(entry.path());
 			}
 			else
 			{
@@ -144,7 +144,7 @@ bool Delete::DirectoryExists(const wchar_t* path)
 void Delete::DeleteTempFiles()
 {
 	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Temp\\");
-	DeleteFilesRecursevly(path);
+	DeleteFilesRecursively(path);
 }
 
 /**
@@ -155,17 +155,17 @@ void Delete::DeleteWindowsTempFiles()
 	wchar_t path[MAX_PATH];
 	swprintf(path, MAX_PATH, L"C:\\Windows\\Temp\\");
 
-	DeleteFilesRecursevly(path);
+	DeleteFilesRecursively(path);
 }
 
 void Delete::DeleteWindowsInstallationFiles()
 {
 	wchar_t path[MAX_PATH];
 	swprintf(path, MAX_PATH, L"C:\\$WINDOWS.~BT");
-	DeleteFilesRecursevly(path);
+	DeleteFilesRecursively(path);
 
 	swprintf(path, MAX_PATH, L"C:\\$Windows.~WS");
-	DeleteFilesRecursevly(path);
+	DeleteFilesRecursively(path);
 }
 
 /**
@@ -207,25 +207,6 @@ void Delete::DeleteBrowserCaches()
 	}
 }
 
-/*void Delete::DeleteWindowsLogs()
-{
-    Log::OpenConsole();
-
-    wchar_t pathWindows[MAX_PATH];
-    wchar_t pathSystem32[MAX_PATH];
-    swprintf(pathSystem32, MAX_PATH, L"C:\\Windows\\System32\\LogFiles\\");
-    swprintf(pathWindows, MAX_PATH, L"C:\\Windows\\Logs\\");
-    std::wcout << pathWindows << std::endl;
-    std::wcout << pathSystem32 << std::endl;
-
-    DeleteFilesRecursevly(pathWindows);
-    DeleteFilesRecursevly(pathSystem32);
-}*/
-
-
-/**
- * DeleteCookies function to delete cookies.
- */
 void Delete::DeleteCookies()
 {
 	auto path = SetPath(L"C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Network\\");

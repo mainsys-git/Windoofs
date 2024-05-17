@@ -28,7 +28,7 @@ void Log::OpenConsole()
  * @param message The message to be logged.
  * @param succeed Whether the operation was successful.
  */
-void Log::LogMessage(const wchar_t* message, bool succeed)
+void Log::LogMessage(const wchar_t* message, const bool succeed)
 {
 	// Get the standard output handle
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -57,5 +57,5 @@ void Log::LogMessage(const wchar_t* message, bool succeed)
 
 	// Reset the console text color to default
 	SetConsoleTextAttribute(hConsole, DEFAULT_COLOR);
-	std::wcout << message << std::endl;
+	std::wcout << message << "\n";
 }

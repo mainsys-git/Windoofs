@@ -74,7 +74,6 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 
 	ProgramManagement::ProgramEntry();
 
-	
 
 	// Check if temp files checkbox is checked
 	if (cbTemp->IsChecked())

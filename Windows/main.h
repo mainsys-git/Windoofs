@@ -16,7 +16,7 @@ public:
 
 private:
 	void OnClean_Clicked(wxCommandEvent& event);
-	// Elemente
+	// Elements
 	wxCheckBox* cbTemp;
 	wxCheckBox* cbInstallFiles;
 	wxCheckBox* cbCache;
