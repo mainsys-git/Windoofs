@@ -64,7 +64,7 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 	// Check if log is not open
 	//if (!Log::IsOpen)
 	//{
-		// Open console log
+	// Open console log
 	//	Log::OpenConsole();
 	//	Log::IsOpen = true;
 	//}

@@ -79,7 +79,7 @@ void Delete::DeleteFilesRecursevly(const std::filesystem::path& dir)
 					MainGUI::lbFiles->AppendString(entry.path().c_str());
 					if (Log::IsOpen)
 					{
-												Log::LogMessage(entry.path().c_str(), true);
+						Log::LogMessage(entry.path().c_str(), true);
 					}
 					MainGUI::UpdateGui();
 				}
