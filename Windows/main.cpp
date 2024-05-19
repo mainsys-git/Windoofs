@@ -5,44 +5,75 @@
 wxListBox* MainGUI::lbFiles = nullptr;
 
 // Constructor for MainGUI class
-MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Windoof")
-{
-	// Initialize check boxes
-	int checkBoxX = 10;
-	int checkBoxY = 10;
-	int checkBoxSpacing = 30;
+MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Windoof") {
+    // Create a panel to hold all the widgets
+    wxPanel* panel = new wxPanel(this, wxID_ANY);
 
-	// Check box to delete temp files
-	cbTemp = new wxCheckBox(this, wxID_ANY, "Delete Temp Files?", wxPoint(checkBoxX, checkBoxY));
+    // Create a vertical box sizer to manage the layout
+    wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
 
-	// Check box to delete install files
-	cbInstallFiles = new wxCheckBox(this, wxID_ANY, "Delete Install Files?",
-	                                wxPoint(checkBoxX, checkBoxY + checkBoxSpacing));
+    // Create a grid sizer for the checkboxes
+    wxGridSizer* gridSizer = new wxGridSizer(2, 2, 10, 10); // Adjust the rows and columns as needed
 
-	// Check box to delete Chrome cache
-	cbCache = new wxCheckBox(this, wxID_ANY, "Delete Cache?",
-	                         wxPoint(checkBoxX, checkBoxY + 2 * checkBoxSpacing));
+    // Initialize check boxes
+    cbTemp = new wxCheckBox(panel, wxID_ANY, "Delete Temp Files?");
+    cbInstallFiles = new wxCheckBox(panel, wxID_ANY, "Delete Install Files?");
+    cbCache = new wxCheckBox(panel, wxID_ANY, "Delete Cache?");
+    cbCookies = new wxCheckBox(panel, wxID_ANY, "Delete Cookies?");
+    cbRecycleBin = new wxCheckBox(panel, wxID_ANY, "Clear Recycle Bin");
 
-	// Check box to delete cookies
-	cbCookies = new wxCheckBox(this, wxID_ANY, "Delete Cookies?", wxPoint(checkBoxX, checkBoxY + 3 * checkBoxSpacing));
+    // Set default values
+    cbCache->SetValue(true);
+    cbTemp->SetValue(true);
+    cbRecycleBin->SetValue(true);
 
-	// Check box to clear Recycle Bin
-	cbRecycleBin = new wxCheckBox(this, wxID_ANY, "Clear Recycle Bin",
-	                              wxPoint(checkBoxX + 200, checkBoxY + 3 * checkBoxSpacing));
+    // Apply flat design styles to check boxes
+    wxFont checkBoxFont(12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxColour checkBoxBgColor(236, 240, 241);
+    wxColour checkBoxTextColor(52, 73, 94);
 
-	// Initialize list box
-	int listBoxX = 10;
-	int listBoxY = 150;
-	int listBoxWidth = 300;
-	int listBoxHeight = 100;
-	lbFiles = new wxListBox(this, wxID_ANY, wxPoint(listBoxX, listBoxY), wxSize(listBoxWidth, listBoxHeight));
+    auto checkBoxes = {cbTemp, cbInstallFiles, cbCache, cbCookies, cbRecycleBin};
+    for (auto checkBox : checkBoxes) {
+        checkBox->SetFont(checkBoxFont);
+        checkBox->SetBackgroundColour(checkBoxBgColor);
+        checkBox->SetForegroundColour(checkBoxTextColor);
+    }
 
-	// Initialize clear button
-	clearButton = new wxButton(this, wxID_ANY, "Clear", wxPoint(listBoxX, listBoxY + listBoxHeight + 10),
-	                           wxSize(50, 20));
+    // Add check boxes to the grid sizer
+    gridSizer->Add(cbTemp, 0, wxEXPAND);
+    gridSizer->Add(cbInstallFiles, 0, wxEXPAND);
+    gridSizer->Add(cbCache, 0, wxEXPAND);
+    gridSizer->Add(cbCookies, 0, wxEXPAND);
+    gridSizer->Add(cbRecycleBin, 0, wxEXPAND);
 
-	// Bind button click event handler
-	clearButton->Bind(wxEVT_BUTTON, &MainGUI::OnClean_Clicked, this);
+    // Add the grid sizer to the vertical box sizer
+    vbox->Add(gridSizer, 0, wxALL | wxEXPAND, 10);
+
+    // Initialize list box
+    lbFiles = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(300, 100));
+    lbFiles->SetBackgroundColour(wxColour(255, 255, 255));
+    lbFiles->SetForegroundColour(checkBoxTextColor);
+    vbox->Add(lbFiles, 0, wxALL | wxEXPAND, 10);
+
+    // Initialize clear button
+    clearButton = new wxButton(panel, wxID_ANY, "Clear");
+    clearButton->SetBackgroundColour(wxColour(231, 76, 60));
+    clearButton->SetForegroundColour(wxColour(255, 255, 255));
+    clearButton->SetFont(wxFont(14, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    vbox->Add(clearButton, 0, wxALL | wxALIGN_CENTER, 10);
+
+    // Set the panel sizer
+    panel->SetSizer(vbox);
+
+    // Bind button click event handler
+    clearButton->Bind(wxEVT_BUTTON, &MainGUI::OnClean_Clicked, this);
+
+    // Fit the frame to the sizer
+    vbox->Fit(panel);
+    vbox->SetSizeHints(panel);
+
+    // Apply flat design to the panel
+    panel->SetBackgroundColour(wxColour(236, 240, 241));
 }
 
 // Update GUI method
@@ -61,7 +92,7 @@ void MainGUI::UpdateGui()
 // Event handler for clear button click
 void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 {
-	// Check if log is not open
+	//Check if log is not open
 	//if (!Log::IsOpen)
 	//{
 	// Open console log
@@ -69,12 +100,13 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 	//	Log::IsOpen = true;
 	//}
 
+
 	// Check if temp files checkbox is checked
 	if (cbTemp->IsChecked())
 	{
 		// Delete temp files
 		Delete::DeleteTempFiles();
-		Delete::DeleteWindowsTempFiles();
+		//Delete::DeleteWindowsTempFiles();
 		// Uncheck temp files checkbox
 		cbTemp->SetValue(false);
 	}
@@ -83,7 +115,7 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 	if (cbInstallFiles->IsChecked())
 	{
 		// Delete install files
-		Delete::DeleteWindowsInstallFiles();
+		Delete::DeleteWindowsInstallationFiles();
 		// Uncheck install files checkbox
 		cbInstallFiles->SetValue(false);
 	}
@@ -160,12 +192,11 @@ void MainGUI::OnClean_Clicked(wxCommandEvent& event)
 
 bool Windoof::OnInit()
 {
-	auto frame = new MainGUI();
-	frame->SetSize(400, 330);
-	frame->SetMinSize(wxSize(400, 330));
-	frame->SetMaxSize(wxSize(400, 330));
-	frame->SetBackgroundColour(wxColour(225, 225, 225));
-	frame->Show(true);
+	MainGUI* mainFrame = new MainGUI();
+	mainFrame->Show(true);
+	mainFrame->SetSize(700, 300);
+	mainFrame->SetMaxSize(wxSize(1920, 300));
+	mainFrame->SetMinSize(wxSize(700, 300));
 	return true;
 }
 

@@ -144,6 +144,7 @@
     <ClCompile Include="LogConsole.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProcessManagement.cpp" />
+    <ClCompile Include="ProgramManagement.cpp" />
     <ClCompile Include="UselessWinFiles.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="LogConsole.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="ProcessManagement.h" />
+    <ClInclude Include="ProgramManagement.h" />
     <ClInclude Include="UselessWinFiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

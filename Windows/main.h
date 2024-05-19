@@ -1,5 +1,4 @@
 #pragma once
-#include "includes.h"
 
 class Windoof : public wxApp
 {
@@ -15,12 +14,13 @@ public:
 	static void UpdateGui();
 
 private:
-	void OnClean_Clicked(wxCommandEvent& event);
-	// Elemente
-	wxCheckBox* cbTemp;
-	wxCheckBox* cbInstallFiles;
-	wxCheckBox* cbCache;
-	wxCheckBox* cbCookies;
-	wxCheckBox* cbRecycleBin;
-	wxButton* clearButton;
+    wxCheckBox* cbTemp;
+    wxCheckBox* cbInstallFiles;
+    wxCheckBox* cbCache;
+    wxCheckBox* cbCookies;
+    wxCheckBox* cbRecycleBin;
+
+    wxButton* clearButton;
+
+    void OnClean_Clicked(wxCommandEvent& event);
 };

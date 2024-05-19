@@ -5,6 +5,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProcessManagement.cpp" />
     <ClCompile Include="UselessWinFiles.cpp" />
+    <ClCompile Include="ProgramManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes.h" />
@@ -12,5 +13,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="ProcessManagement.h" />
     <ClInclude Include="UselessWinFiles.h" />
+    <ClInclude Include="ProgramManagement.h" />
   </ItemGroup>
 </Project>
